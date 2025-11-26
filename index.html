@@ -6,6 +6,8 @@
   <title>M. Eldhi Putra | Web3 Ambassador & Node Operator</title>
   <!-- Global styles with dark theme and gradient accent -->
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
     :root {
       --bg: #0b0d14;
       --card: #101525;
@@ -16,6 +18,7 @@
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       --radius: 14px;
       --glass: rgba(255, 255, 255, 0.06);
+      --danger: #f43f5e;
     }
 
     * {
@@ -28,10 +31,12 @@
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.15), transparent 30%),
         radial-gradient(circle at 80% 0%, rgba(34, 211, 238, 0.12), transparent 25%),
+        linear-gradient(180deg, rgba(34, 211, 238, 0.08), rgba(79, 70, 229, 0.06)),
         var(--bg);
       color: var(--text);
       line-height: 1.7;
       scroll-behavior: smooth;
+      min-height: 100vh;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -45,10 +50,28 @@
       padding: 4rem 0;
     }
 
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1.5rem;
+    }
+
     .section-title {
       font-size: 2.2rem;
-      margin-bottom: 1rem;
       letter-spacing: -0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
     }
 
     .section-subtitle {
@@ -147,6 +170,8 @@
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
       align-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
     .hero h1 {
@@ -154,6 +179,8 @@
       letter-spacing: -0.04em;
       margin-bottom: 0.5rem;
     }
+
+    .hero > * { position: relative; z-index: 1; }
 
     .hero .tagline { color: var(--muted); margin-bottom: 1.2rem; }
     .hero .description { color: #c7d2e9; margin-bottom: 1.8rem; max-width: 620px; }
@@ -167,6 +194,7 @@
       height: 260px;
       display: grid;
       place-items: center;
+      isolation: isolate;
     }
 
     .hero-visual .circle {
@@ -191,6 +219,51 @@
       backdrop-filter: blur(10px);
     }
 
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      z-index: 0;
+    }
+
+    .hero::before {
+      background: var(--accent1);
+      top: -30px;
+      left: -80px;
+    }
+
+    .hero::after {
+      background: var(--accent2);
+      bottom: -80px;
+      right: -60px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin: 1rem 0 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill {
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
     /* About */
     #about .content {
       display: grid;
@@ -204,10 +277,32 @@
       border-radius: var(--radius);
       padding: 1.5rem;
       box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .card h4 { margin-bottom: 0.8rem; }
     .muted { color: var(--muted); }
+    .card > * { position: relative; z-index: 1; }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(79, 70, 229, 0.18), rgba(34, 211, 238, 0.14));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .card:hover::after { opacity: 1; }
 
     /* Ambassador Journey */
     .filter-bar {
@@ -314,6 +409,7 @@
     input:focus, textarea:focus { outline: 1px solid var(--accent2); }
 
     .alert { margin-top: 0.7rem; color: #22c55e; font-weight: 600; display: none; }
+    .alert.error { color: var(--danger); }
 
     /* Footer */
     footer { padding: 2rem 0; text-align: center; color: var(--muted); border-top: 1px solid rgba(255, 255, 255, 0.08); }
@@ -344,7 +440,7 @@
     <div class="nav">
       <div class="logo">EL21</div>
       <nav>
-        <div class="burger" id="burger" aria-label="Toggle navigation">
+        <div class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false">
           <span></span><span></span><span></span>
         </div>
         <ul id="nav-links">
@@ -368,6 +464,11 @@
         <h1>M. Eldhi Putra (EL21)</h1>
         <p class="tagline">Web3 Ambassador • Decentralized AI Advocate • Junior Node Operator</p>
         <p class="description">I connect communities, decentralized AI, and blockchain infrastructure through hands-on ambassadorship and node operations.</p>
+        <div class="hero-meta">
+          <span class="pill">📍 Indonesia</span>
+          <span class="pill">🤝 Web3 Ambassador</span>
+          <span class="pill">🛰️ Junior Node Operator</span>
+        </div>
         <div class="hero-actions">
           <a class="btn" href="#ambassador">View Ambassador Journey</a>
           <a class="btn secondary" href="#nodes">View Node Projects</a>
@@ -382,7 +483,10 @@
 
   <!-- About Section -->
   <section id="about" class="container">
-    <h2 class="section-title">About Me</h2>
+    <div class="section-header">
+      <h2 class="section-title">About Me</h2>
+      <p class="section-subtitle">Blending data, infrastructure, and people-first community building.</p>
+    </div>
     <div class="content">
       <div class="card">
         <p class="muted">Background</p>
@@ -403,8 +507,10 @@
 
   <!-- Ambassador Journey Section -->
   <section id="ambassador" class="container">
-    <h2 class="section-title">Ambassador Journey</h2>
-    <p class="section-subtitle">Leading and supporting communities across decentralized AI, DeFi, and infrastructure projects.</p>
+    <div class="section-header">
+      <h2 class="section-title">Ambassador Journey</h2>
+      <p class="section-subtitle">Leading and supporting communities across decentralized AI, DeFi, and infrastructure projects.</p>
+    </div>
     <div class="filter-bar" id="filter-bar">
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="deai">DeAI</button>
@@ -455,8 +561,10 @@
 
   <!-- Node & Infra Projects Section -->
   <section id="nodes" class="container">
-    <h2 class="section-title">Node &amp; Infra Projects</h2>
-    <p class="section-subtitle">Testnets, validators, and infrastructure I’ve contributed to.</p>
+    <div class="section-header">
+      <h2 class="section-title">Node &amp; Infra Projects</h2>
+      <p class="section-subtitle">Testnets, validators, and infrastructure I’ve contributed to.</p>
+    </div>
     <div class="grid">
       <div class="card">
         <h4>Somnia Testnet</h4>
@@ -491,8 +599,10 @@
 
   <!-- Skills Section -->
   <section id="skills" class="container">
-    <h2 class="section-title">Skills &amp; Focus</h2>
-    <p class="section-subtitle">Click any skill to see a quick description.</p>
+    <div class="section-header">
+      <h2 class="section-title">Skills &amp; Focus</h2>
+      <p class="section-subtitle">Click any skill to see a quick description.</p>
+    </div>
     <div class="card">
       <div class="skill-category">
         <div class="skill-title">Technical</div>
@@ -530,7 +640,10 @@
 
   <!-- Highlights Section -->
   <section id="highlights" class="container">
-    <h2 class="section-title">Highlights</h2>
+    <div class="section-header">
+      <h2 class="section-title">Highlights</h2>
+      <p class="section-subtitle">Easily editable wins and milestones from across communities and nodes.</p>
+    </div>
     <div class="grid">
       <div class="card">
         <h4>Community Events</h4>
@@ -549,8 +662,10 @@
 
   <!-- Contact Section -->
   <section id="contact" class="container">
-    <h2 class="section-title">Let’s Connect</h2>
-    <p class="section-subtitle">Open to collaboration on Web3, decentralized AI, and node infrastructure.</p>
+    <div class="section-header">
+      <h2 class="section-title">Let’s Connect</h2>
+      <p class="section-subtitle">Open to collaboration on Web3, decentralized AI, and node infrastructure.</p>
+    </div>
     <div class="hero-actions" style="margin-bottom:1rem;">
       <a class="btn secondary" href="https://twitter.com/el2158033244" target="_blank">X (Twitter)</a>
       <a class="btn secondary" href="https://t.me/Mister_21" target="_blank">Telegram</a>
@@ -562,6 +677,7 @@
         <input type="email" id="email" name="email" placeholder="Email" required>
         <textarea id="message" name="message" placeholder="Message" class="full" required></textarea>
         <button class="btn" type="submit">Send</button>
+        <div id="form-error" class="alert error">Please fill out all fields.</div>
         <div id="alert" class="alert">Message sent!</div>
       </form>
     </div>
@@ -582,13 +698,17 @@
         const target = document.querySelector(link.getAttribute('href'));
         target?.scrollIntoView({ behavior: 'smooth' });
         navLinks.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
       });
     });
 
     // Mobile nav toggle
     const burger = document.getElementById('burger');
     const navLinks = document.getElementById('nav-links');
-    burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    burger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      burger.setAttribute('aria-expanded', navLinks.classList.contains('open'));
+    });
 
     // Filter logic for ambassador cards
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -638,6 +758,7 @@
     // Contact form validation (front-end only)
     const contactForm = document.getElementById('contact-form');
     const alertBox = document.getElementById('alert');
+    const errorBox = document.getElementById('form-error');
     contactForm.addEventListener('submit', e => {
       e.preventDefault();
       const name = contactForm.name.value.trim();
@@ -645,12 +766,17 @@
       const message = contactForm.message.value.trim();
       const validEmail = /[^@\s]+@[^@\s]+\.[^@\s]+/;
 
+      errorBox.style.display = 'none';
+      alertBox.style.display = 'none';
+
       if (!name || !email || !message) {
-        alert('Please complete all fields.');
+        errorBox.textContent = 'Please complete all fields.';
+        errorBox.style.display = 'block';
         return;
       }
       if (!validEmail.test(email)) {
-        alert('Please enter a valid email.');
+        errorBox.textContent = 'Please enter a valid email address.';
+        errorBox.style.display = 'block';
         return;
       }
       alertBox.style.display = 'block';
