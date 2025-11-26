@@ -724,20 +724,22 @@
 
   <!-- JavaScript for interactions -->
   <script>
+    // Nav references
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('nav-links');
+
     // Smooth scrolling for nav links
     document.querySelectorAll('nav a').forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
         const target = document.querySelector(link.getAttribute('href'));
         target?.scrollIntoView({ behavior: 'smooth' });
-        navLinks.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
+        navLinks?.classList.remove('open');
+        burger?.setAttribute('aria-expanded', 'false');
       });
     });
 
     // Mobile nav toggle
-    const burger = document.getElementById('burger');
-    const navLinks = document.getElementById('nav-links');
     burger.addEventListener('click', () => {
       navLinks.classList.toggle('open');
       burger.setAttribute('aria-expanded', navLinks.classList.contains('open'));
