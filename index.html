@@ -43,6 +43,11 @@
 
     img { max-width: 100%; display: block; }
 
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
     /* Layout helpers */
     .container {
       width: min(1200px, 90vw);
@@ -710,8 +715,8 @@
         <input type="email" id="email" name="email" placeholder="Email" required>
         <textarea id="message" name="message" placeholder="Message" class="full" required></textarea>
         <button class="btn" type="submit">Send</button>
-        <div id="form-error" class="alert error">Please fill out all fields.</div>
-        <div id="alert" class="alert">Message sent!</div>
+        <div id="form-error" class="alert error" role="alert" aria-live="assertive">Please fill out all fields.</div>
+        <div id="alert" class="alert" role="status" aria-live="polite">Message sent!</div>
       </form>
     </div>
   </section>
