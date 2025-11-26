@@ -210,6 +210,20 @@
       filter: drop-shadow(0 15px 50px rgba(0, 0, 0, 0.4));
     }
 
+    .mascot {
+      position: absolute;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
     .badge {
       position: absolute;
       bottom: 12px;
@@ -481,6 +495,7 @@
       </div>
       <div class="hero-visual">
         <div class="circle"></div>
+        <div class="mascot" aria-label="EL Mascot">EL Mascot</div>
         <div class="badge">Web3 Ambassador</div>
       </div>
     </div>
@@ -504,7 +519,7 @@
         <ul class="muted">
           <li>Based in: Indonesia</li>
           <li>Focus: Web3 Ambassador, Decentralized AI, Node Operations</li>
-          <li>Communities: BitSeek, Arcium, Somnia, Sahara AI, GaiAI, 42, Openmind, Optimum</li>
+          <li>Communities: BitSeek, Somnia, GaiAI, 42, Openmind, Optimum, Dill</li>
         </ul>
       </div>
     </div>
@@ -531,12 +546,6 @@
         <div class="tag">Community Growth</div><div class="tag">DeAI</div>
         <p class="muted">Engaging community members, sharing AI-driven insights, and elevating developer onboarding.</p>
       </div>
-      <div class="card" data-type="infra">
-        <h4>Arcium – Onchain Privacy &amp; Gaming Advocate</h4>
-        <p class="muted">Role: Ambassador</p>
-        <div class="tag">Infrastructure</div><div class="tag">Gaming</div>
-        <p class="muted">Championing privacy tooling, testing features, and gathering feedback from players and builders.</p>
-      </div>
       <div class="card" data-type="gaming">
         <h4>Somnia – Metaverse &amp; Testnet Contributor</h4>
         <p class="muted">Role: Community</p>
@@ -544,32 +553,26 @@
         <p class="muted">Coordinating quests, inviting creators, and reporting testnet issues to improve the network.</p>
       </div>
       <div class="card" data-type="deai">
-        <h4>Sahara AI – Decentralized AI Advocate</h4>
-        <p class="muted">Role: Ambassador</p>
-        <div class="tag">DeAI</div><div class="tag">Education</div>
-        <p class="muted">Showcasing decentralized inference workflows and empowering builders with learning resources.</p>
-      </div>
-      <div class="card" data-type="deai">
         <h4>GaiAI – AI x Community Bridge</h4>
-        <p class="muted">Role: Ambassador</p>
+        <p class="muted">Role: OG</p>
         <div class="tag">Content</div><div class="tag">Community Growth</div>
         <p class="muted">Translating complex AI tooling into clear explainers and hosting onboarding sessions.</p>
       </div>
       <div class="card" data-type="infra">
         <h4>42 – Infrastructure Explorer</h4>
-        <p class="muted">Role: Contributor</p>
+        <p class="muted">Role: OG</p>
         <div class="tag">Infrastructure</div><div class="tag">Testing</div>
         <p class="muted">Running experiments on decentralized compute, sharing findings, and refining validator guides.</p>
       </div>
       <div class="card" data-type="deai">
         <h4>Openmind – Collaborative AI Steward</h4>
-        <p class="muted">Role: Ambassador</p>
+        <p class="muted">Role: OG</p>
         <div class="tag">DeAI</div><div class="tag">Community</div>
         <p class="muted">Facilitating contributor meetups, encouraging open-model practices, and gathering feedback.</p>
       </div>
       <div class="card" data-type="infra">
         <h4>Optimum – Node &amp; Ops Support</h4>
-        <p class="muted">Role: Node Advocate</p>
+        <p class="muted">Role: OG</p>
         <div class="tag">Infrastructure</div><div class="tag">Monitoring</div>
         <p class="muted">Building uptime playbooks, coordinating test cycles, and improving observability for operators.</p>
       </div>
@@ -598,22 +601,15 @@
         <p class="muted">Experimenting with privacy modules, reporting issues, and tuning resource usage for cluster stability.</p>
       </div>
       <div class="card">
-        <h4>Sahara AI Node Pilot</h4>
-        <div class="status progress">In Progress</div>
-        <p class="muted">Role: Junior Node Operator</p>
-        <p class="muted">Stack: Linux, Docker, Metrics</p>
-        <p class="muted">Testing decentralized inference workloads, benchmarking latency, and tuning resource allocation.</p>
-      </div>
-      <div class="card">
         <h4>GaiAI Validator Track</h4>
-        <div class="status progress">In Progress</div>
+        <div class="status active">Active</div>
         <p class="muted">Role: Validator Candidate</p>
         <p class="muted">Stack: CLI, Monitoring, Alerts</p>
         <p class="muted">Deploying nodes, refining alert rules, and sharing runbooks with fellow operators.</p>
       </div>
       <div class="card">
         <h4>42 Infrastructure Lab</h4>
-        <div class="status completed">Completed</div>
+        <div class="status active">Active</div>
         <p class="muted">Role: Contributor</p>
         <p class="muted">Stack: Linux, Observability</p>
         <p class="muted">Prototyped decentralized compute experiments and documented performance notes.</p>
@@ -627,10 +623,17 @@
       </div>
       <div class="card">
         <h4>Optimum Ops Network</h4>
-        <div class="status progress">In Progress</div>
+        <div class="status active">Active</div>
         <p class="muted">Role: Node Advocate</p>
         <p class="muted">Stack: Linux, Monitoring, Automation</p>
         <p class="muted">Improving uptime playbooks, coordinating upgrades, and enhancing automation scripts.</p>
+      </div>
+      <div class="card">
+        <h4>Dill Node Run</h4>
+        <div class="status completed">Completed</div>
+        <p class="muted">Role: Node Runner</p>
+        <p class="muted">Stack: Linux, Docker, Monitoring</p>
+        <p class="muted">Completed a Dill node setup, validated uptime, and documented the runbook for future operators.</p>
       </div>
     </div>
   </section>
@@ -705,7 +708,7 @@
       <p class="section-subtitle">Open to collaboration on Web3, decentralized AI, and node infrastructure.</p>
     </div>
     <div class="hero-actions" style="margin-bottom:1rem;">
-      <a class="btn secondary" href="https://twitter.com/el2158033244" target="_blank">X (Twitter)</a>
+      <a class="btn secondary" href="https://x.com/el2158033244" target="_blank">X (Twitter)</a>
       <a class="btn secondary" href="https://t.me/Mister_21" target="_blank">Telegram</a>
       <a class="btn secondary" href="https://discord.com/users/flyerz21" target="_blank">Discord</a>
     </div>
