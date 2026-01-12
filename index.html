@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EL21 | Web3 Ambassador & Node Operator</title>
+  <!-- Global styles with dark theme and gradient accent -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #0b0d14;
+      --card: #101525;
+      --muted: #b0bdd6;
+      --text: #e7ecf7;
+      --accent1: #4f46e5;
+      --accent2: #22d3ee;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --radius: 14px;
+      --glass: rgba(255, 255, 255, 0.06);
+      --danger: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.15), transparent 30%),
+        radial-gradient(circle at 80% 0%, rgba(34, 211, 238, 0.12), transparent 25%),
+        linear-gradient(180deg, rgba(34, 211, 238, 0.08), rgba(79, 70, 229, 0.06)),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .card a { color: var(--accent2); font-weight: 600; }
+    .card a:hover { color: #7dd3fc; }
+
+    img { max-width: 100%; display: block; }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+    /* Layout helpers */
+    .container {
+      width: min(1200px, 90vw);
+      margin: 0 auto;
+      padding: 4rem 0;
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      letter-spacing: -0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      max-width: 640px;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.4rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      color: #0b0d14;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      box-shadow: none;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35); }
+    .btn.secondary:hover { border-color: rgba(255, 255, 255, 0.35); }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 13, 20, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      width: min(1200px, 90vw);
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    nav ul {
+      display: flex;
+      gap: 1.2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-weight: 600;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .burger span {
+      width: 26px;
+      height: 3px;
+      background: var(--text);
+      border-radius: 10px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Hero */
+    #home {
+      padding: 5rem 0 2rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 5vw, 3.6rem);
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero > * { position: relative; z-index: 1; }
+
+    .hero .tagline { color: var(--muted); margin-bottom: 1.2rem; }
+    .hero .description { color: #c7d2e9; margin-bottom: 1.8rem; max-width: 620px; }
+
+    .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+    .hero-visual {
+      justify-self: center;
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .hero-visual .circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(79, 70, 229, 0.4), rgba(34, 211, 238, 0.35));
+      filter: drop-shadow(0 15px 50px rgba(0, 0, 0, 0.4));
+    }
+
+    .mascot {
+      position: absolute;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .badge {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      z-index: 0;
+    }
+
+    .hero::before {
+      background: var(--accent1);
+      top: -30px;
+      left: -80px;
+    }
+
+    .hero::after {
+      background: var(--accent2);
+      bottom: -80px;
+      right: -60px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin: 1rem 0 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill {
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* About */
+    #about .content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card h4 { margin-bottom: 0.8rem; }
+    .muted { color: var(--muted); }
+    .card > * { position: relative; z-index: 1; }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(79, 70, 229, 0.18), rgba(34, 211, 238, 0.14));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .card:hover::after { opacity: 1; }
+
+    /* Ambassador Journey */
+    .filter-bar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: linear-gradient(120deg, rgba(79, 70, 229, 0.45), rgba(34, 211, 238, 0.35));
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem;
+      margin-right: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .status.active { color: #22d3ee; }
+    .status.progress { color: #f59e0b; }
+    .status.completed { color: #22c55e; }
+
+    /* Skills */
+    .skill-category { margin-bottom: 1rem; }
+    .skill-title { font-weight: 700; margin-bottom: 0.4rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .chip {
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      font-weight: 600;
+    }
+
+    .chip:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.06); }
+    .chip.active { border-color: rgba(79, 70, 229, 0.7); background: rgba(79, 70, 229, 0.12); }
+
+    .skill-info {
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius);
+      min-height: 80px;
+    }
+
+    /* Contact */
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    form .full { grid-column: 1 / -1; }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    textarea { min-height: 140px; resize: vertical; }
+
+    input:focus, textarea:focus { outline: 1px solid var(--accent2); }
+
+    .alert { margin-top: 0.7rem; color: #22c55e; font-weight: 600; display: none; }
+    .alert.error { color: var(--danger); }
+
+    /* Footer */
+    footer { padding: 2rem 0; text-align: center; color: var(--muted); border-top: 1px solid rgba(255, 255, 255, 0.08); }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      .nav ul {
+        position: absolute;
+        right: 5%;
+        top: 72px;
+        background: rgba(11, 13, 20, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        flex-direction: column;
+        padding: 1rem;
+        display: none;
+        width: 220px;
+      }
+      .nav ul.open { display: flex; }
+      .burger { display: flex; }
+      form { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with logo and navigation -->
+  <header>
+    <div class="nav">
+      <div class="logo">EL21</div>
+      <nav>
+        <div class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </div>
+        <ul id="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#ambassador">Ambassador Journey</a></li>
+          <li><a href="#nodes">Node &amp; Infra Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#highlights">Highlights</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="container">
+    <div class="hero">
+      <div>
+        <p class="muted">EL21</p>
+        <h1>EL21</h1>
+        <p class="tagline">Web3 Ambassador • Decentralized AI Advocate • Junior Node Operator</p>
+        <p class="description">I connect communities, decentralized AI, and blockchain infrastructure through hands-on ambassadorship and node operations.</p>
+        <div class="hero-meta">
+          <span class="pill">📍 Indonesia</span>
+          <span class="pill">🤝 Web3 Ambassador</span>
+          <span class="pill">🛰️ Junior Node Operator</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn" href="#ambassador">View Ambassador Journey</a>
+          <a class="btn secondary" href="#nodes">View Node Projects</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="circle"></div>
+        <div class="mascot" aria-label="EL Mascot">EL Mascot</div>
+        <div class="badge">Web3 Ambassador</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="container">
+    <div class="section-header">
+      <h2 class="section-title">About Me</h2>
+      <p class="section-subtitle">Blending data, infrastructure, and people-first community building.</p>
+    </div>
+    <div class="content">
+      <div class="card">
+        <p class="muted">Background</p>
+        <p>With roots in IT, data, and banking, I bridge analytical rigor with the fast-evolving world of decentralized technologies. I am passionate about how Web3 and decentralized AI reshape how communities coordinate and own their data.</p>
+        <br>
+        <p>I thrive in privacy-preserving, decentralized infrastructure, focusing on community engagement, education, and experimentation with new protocols.</p>
+      </div>
+      <div class="card">
+        <h4>Quick Info</h4>
+        <ul class="muted">
+          <li>Based in: Indonesia</li>
+          <li>Focus: Web3 Ambassador, Decentralized AI, Node Operations</li>
+          <li>Communities: BitSeek, Somnia, Arcium, GaiAI, 42, Openmind, Optimum, Block Street, Dill</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ambassador Journey Section -->
+  <section id="ambassador" class="container">
+    <div class="section-header">
+      <h2 class="section-title">Ambassador Journey</h2>
+      <p class="section-subtitle">Leading and supporting communities across decentralized AI, DeFi, and infrastructure projects.</p>
+    </div>
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="deai">DeAI</button>
+      <button class="filter-btn" data-filter="defi">DeFi</button>
+      <button class="filter-btn" data-filter="infra">Infrastructure</button>
+      <button class="filter-btn" data-filter="gaming">Gaming</button>
+    </div>
+    <div class="grid" id="ambassador-grid">
+      <!-- Each card carries a data-type attribute for filtering -->
+      <div class="card" data-type="deai">
+        <h4>BitSeek – DeAI Ambassador</h4>
+        <p class="muted">Role: Ambassador</p>
+        <div class="tag">Community Growth</div><div class="tag">DeAI</div>
+        <p class="muted">Engaging community members, sharing AI-driven insights, and elevating developer onboarding.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://bitseek.ai" target="_blank">bitseek.ai</a></p>
+      </div>
+      <div class="card" data-type="gaming">
+        <h4>Somnia – OG Metaverse Contributor</h4>
+        <p class="muted">Role: OG Contributor</p>
+        <div class="tag">Metaverse</div><div class="tag">Testing</div>
+        <p class="muted">Coordinating quests, inviting creators, and reporting testnet issues to improve the network.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://somnia.network" target="_blank">somnia.network</a></p>
+      </div>
+      <div class="card" data-type="deai">
+        <h4>GaiAI – AI x Community Bridge</h4>
+        <p class="muted">Role: OG Contributor</p>
+        <div class="tag">Content</div><div class="tag">Community Growth</div>
+        <p class="muted">Translating complex AI tooling into clear explainers and hosting onboarding sessions.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://gaiai.io/" target="_blank">Website</a> · <a href="https://x.com/GaiAIio" target="_blank">Twitter</a> · <a href="https://discord.gg/gaiai" target="_blank">Discord</a></p>
+      </div>
+      <div class="card" data-type="infra">
+        <h4>42 – Infrastructure Explorer</h4>
+        <p class="muted">Role: OG Contributor</p>
+        <div class="tag">Infrastructure</div><div class="tag">Testing</div>
+        <p class="muted">Running experiments on decentralized compute, sharing findings, and refining validator guides.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://42.space/" target="_blank">42.space</a></p>
+      </div>
+      <div class="card" data-type="deai">
+        <h4>Openmind – Collaborative AI Steward</h4>
+        <p class="muted">Role: OG Contributor</p>
+        <div class="tag">DeAI</div><div class="tag">Community</div>
+        <p class="muted">Facilitating contributor meetups, encouraging open-model practices, and gathering feedback.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://www.openmind.org/" target="_blank">Website</a> · <a href="https://x.com/openmind_agi" target="_blank">X</a> · <a href="https://docs.openmind.org/" target="_blank">Docs</a></p>
+      </div>
+      <div class="card" data-type="infra">
+        <h4>Optimum – Node &amp; Ops Support</h4>
+        <p class="muted">Role: OG Contributor</p>
+        <div class="tag">Infrastructure</div><div class="tag">Monitoring</div>
+        <p class="muted">Building uptime playbooks, coordinating test cycles, and improving observability for operators.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://www.getoptimum.xyz/" target="_blank">Website</a> · <a href="https://x.com/get_optimum" target="_blank">X</a> · <a href="https://docs.getoptimum.xyz/" target="_blank">Docs</a></p>
+      </div>
+      <div class="card" data-type="defi">
+        <h4>Block Street – OG Contributor</h4>
+        <p class="muted">Role: OG Contributor</p>
+        <div class="tag">DeFi</div><div class="tag">Community</div>
+        <p class="muted">Amplifying campaigns, gathering user feedback, and supporting early liquidity education.</p>
+        <p class="muted"><strong>Official:</strong> <a href="https://blockstreet.money/" target="_blank">blockstreet.money</a></p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:1rem;">Reminder: always double-check official URLs before interacting to avoid scams.</p>
+  </section>
+
+  <!-- Node & Infra Projects Section -->
+  <section id="nodes" class="container">
+    <div class="section-header">
+      <h2 class="section-title">Node &amp; Infra Projects</h2>
+      <p class="section-subtitle">Testnets, validators, and infrastructure I’ve contributed to.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h4>Somnia Testnet</h4>
+        <div class="status active">Active</div>
+        <p class="muted">Role: Junior Node Operator</p>
+        <p class="muted">Stack: Linux, Docker, CLI, Monitoring</p>
+        <p class="muted">Maintaining uptime, running health checks, and sharing feedback with the validator community.</p>
+      </div>
+      <div class="card">
+        <h4>Arcium Beta Cluster</h4>
+        <div class="status active">Active</div>
+        <p class="muted">Role: Testnet Participant</p>
+        <p class="muted">Stack: Kubernetes, CLI, Logs</p>
+        <p class="muted">Experimenting with privacy modules, reporting issues, and tuning resource usage for cluster stability.</p>
+      </div>
+      <div class="card">
+        <h4>GaiAI Validator Track</h4>
+        <div class="status active">Active</div>
+        <p class="muted">Role: Validator Candidate</p>
+        <p class="muted">Stack: CLI, Monitoring, Alerts</p>
+        <p class="muted">Deploying nodes, refining alert rules, and sharing runbooks with fellow operators.</p>
+      </div>
+      <div class="card">
+        <h4>42 Infrastructure Lab</h4>
+        <div class="status active">Active</div>
+        <p class="muted">Role: Contributor</p>
+        <p class="muted">Stack: Linux, Observability</p>
+        <p class="muted">Prototyped decentralized compute experiments and documented performance notes.</p>
+      </div>
+      <div class="card">
+        <h4>Openmind Testbed</h4>
+        <div class="status active">Active</div>
+        <p class="muted">Role: Testnet Participant</p>
+        <p class="muted">Stack: Docker, CLI, Logging</p>
+        <p class="muted">Running community validators, reporting anomalies, and iterating on setup guides.</p>
+      </div>
+      <div class="card">
+        <h4>Optimum Ops Network</h4>
+        <div class="status active">Active</div>
+        <p class="muted">Role: Node Advocate</p>
+        <p class="muted">Stack: Linux, Monitoring, Automation</p>
+        <p class="muted">Improving uptime playbooks, coordinating upgrades, and enhancing automation scripts.</p>
+      </div>
+      <div class="card">
+        <h4>Dill Node Run</h4>
+        <div class="status completed">Completed</div>
+        <p class="muted">Role: Node Runner</p>
+        <p class="muted">Stack: Linux, Docker, Monitoring</p>
+        <p class="muted">Completed a Dill node setup, validated uptime, and documented the runbook for future operators.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="container">
+    <div class="section-header">
+      <h2 class="section-title">Skills &amp; Focus</h2>
+      <p class="section-subtitle">Click any skill to see a quick description.</p>
+    </div>
+    <div class="card">
+      <div class="skill-category">
+        <div class="skill-title">Technical</div>
+        <div class="chips">
+          <span class="chip" data-skill="Python">Python</span>
+          <span class="chip" data-skill="SQL">SQL</span>
+          <span class="chip" data-skill="Data Analysis">Data Analysis</span>
+          <span class="chip" data-skill="Linux">Linux</span>
+          <span class="chip" data-skill="Node Operations">Node Operations</span>
+          <span class="chip" data-skill="Monitoring">Monitoring</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-title">Web3 &amp; AI</div>
+        <div class="chips">
+          <span class="chip" data-skill="Decentralized AI">Decentralized AI (DeLLM)</span>
+          <span class="chip" data-skill="LLMs">LLMs</span>
+          <span class="chip" data-skill="Web3 Infrastructure">Web3 Infrastructure</span>
+          <span class="chip" data-skill="DeFi basics">DeFi basics</span>
+          <span class="chip" data-skill="Testnets">Testnets</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-title">Community &amp; Content</div>
+        <div class="chips">
+          <span class="chip" data-skill="Community Management">Community Management</span>
+          <span class="chip" data-skill="Event Hosting">Event Hosting</span>
+          <span class="chip" data-skill="Content Creation">Content Creation</span>
+          <span class="chip" data-skill="Education">Education</span>
+        </div>
+      </div>
+      <div class="skill-info" id="skill-info">Select a skill to learn more.</div>
+    </div>
+  </section>
+
+  <!-- Highlights Section -->
+  <section id="highlights" class="container">
+    <div class="section-header">
+      <h2 class="section-title">Highlights</h2>
+      <p class="section-subtitle">Easily editable wins and milestones from across communities and nodes.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h4>Community Events</h4>
+        <p class="muted">Hosted multiple Discord events including Karaoke Night, game tournaments, and quizzes.</p>
+      </div>
+      <div class="card">
+        <h4>Education &amp; Content</h4>
+        <p class="muted">Produced educational threads and articles around decentralized AI and Web3 adoption.</p>
+      </div>
+      <div class="card">
+        <h4>Hands-on Infrastructure</h4>
+        <p class="muted">Operated and experimented with multiple testnet nodes to improve reliability and uptime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="container">
+    <div class="section-header">
+      <h2 class="section-title">Let’s Connect</h2>
+      <p class="section-subtitle">Open to collaboration on Web3, decentralized AI, and node infrastructure.</p>
+    </div>
+    <div class="hero-actions" style="margin-bottom:1rem;">
+      <!-- Social links kept inline for easy swapping -->
+      <a class="btn secondary" href="https://x.com/el2158033244" target="_blank">X (Twitter)</a>
+      <a class="btn secondary" href="https://t.me/Mister_21" target="_blank">Telegram</a>
+      <a class="btn secondary" href="https://discord.com/users/flyerz21" target="_blank">Discord</a>
+    </div>
+    <div class="card">
+      <form id="contact-form" novalidate>
+        <input type="text" id="name" name="name" placeholder="Name" required>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <textarea id="message" name="message" placeholder="Message" class="full" required></textarea>
+        <button class="btn" type="submit">Send</button>
+        <div id="form-error" class="alert error" role="alert" aria-live="assertive">Please fill out all fields.</div>
+        <div id="alert" class="alert" role="status" aria-live="polite">Message sent!</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© <span id="year"></span> EL21. All rights reserved.</p>
+    <p class="muted">Built for my Web3 Ambassador &amp; Node Operator journey.</p>
+  </footer>
+
+  <!-- JavaScript for interactions -->
+  <script>
+    // Nav references
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('nav-links');
+
+    // Smooth scrolling for nav links
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        target?.scrollIntoView({ behavior: 'smooth' });
+        navLinks?.classList.remove('open');
+        burger?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Mobile nav toggle
+    burger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      burger.setAttribute('aria-expanded', navLinks.classList.contains('open'));
+    });
+
+    // Filter logic for ambassador cards
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const ambassadorCards = document.querySelectorAll('#ambassador-grid .card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        ambassadorCards.forEach(card => {
+          const type = card.dataset.type;
+          card.style.display = (filter === 'all' || type === filter) ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Skill description updates
+    const skillDescriptions = {
+      'Python': 'Scripting data pipelines, automation, and quick tooling to support community needs.',
+      'SQL': 'Querying and organizing datasets to monitor campaign results or track community metrics.',
+      'Data Analysis': 'Synthesizing insights from community and node telemetry to guide actions.',
+      'Linux': 'Daily driver for node operations, automation, and troubleshooting.',
+      'Node Operations': 'Running validators/testnets, managing upgrades, and ensuring uptime.',
+      'Monitoring': 'Setting up alerts, dashboards, and health checks for infra reliability.',
+      'Decentralized AI': 'Exploring DeLLM tooling and decentralized model hosting.',
+      'LLMs': 'Experimenting with prompting, fine-tuning basics, and evaluating model performance.',
+      'Web3 Infrastructure': 'Understanding networks, RPCs, staking, and data availability layers.',
+      'DeFi basics': 'Comfortable with liquidity, staking, and incentive programs.',
+      'Testnets': 'Hands-on testing, reporting bugs, and optimizing validator setups.',
+      'Community Management': 'Guiding newcomers, moderating spaces, and aligning goals with teams.',
+      'Event Hosting': 'Running live sessions, quizzes, and interactive community formats.',
+      'Content Creation': 'Creating threads, tutorials, and concise explainers for Web3 audiences.',
+      'Education': 'Designing learning paths and sharing best practices for protocols.',
+    };
+
+    const skillInfo = document.getElementById('skill-info');
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const text = skillDescriptions[chip.dataset.skill] || 'Skill description coming soon.';
+        skillInfo.textContent = text;
+      });
+    });
+
+    // Contact form validation (front-end only)
+    const contactForm = document.getElementById('contact-form');
+    const alertBox = document.getElementById('alert');
+    const errorBox = document.getElementById('form-error');
+    contactForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = contactForm.name.value.trim();
+      const email = contactForm.email.value.trim();
+      const message = contactForm.message.value.trim();
+      const validEmail = /[^@\s]+@[^@\s]+\.[^@\s]+/;
+
+      errorBox.style.display = 'none';
+      alertBox.style.display = 'none';
+
+      if (!name || !email || !message) {
+        errorBox.textContent = 'Please complete all fields.';
+        errorBox.style.display = 'block';
+        return;
+      }
+      if (!validEmail.test(email)) {
+        errorBox.textContent = 'Please enter a valid email address.';
+        errorBox.style.display = 'block';
+        return;
+      }
+      alertBox.style.display = 'block';
+      alertBox.textContent = 'Message sent!';
+      contactForm.reset();
+      setTimeout(() => { alertBox.style.display = 'none'; }, 2500);
+    });
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
